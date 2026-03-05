@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClassController;
+use App\Http\Controllers\PostController;
+use App\Models\Classes;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -10,8 +14,21 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('dashboard', function () {
-    return Inertia::render('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('dashboard', function () {
+        return Inertia::render('dashboard');
+    })->name('dashboard');
+
+    Route::resource('categories', CategoryController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
+
+    Route::resource('classes', ClassController::class)
+        ->parameters(['classes' => 'class'])
+        ->only(['index', 'show', 'store', 'update', 'destroy']);
+
+    Route::resource('posts', PostController::class)
+        ->only(['store', 'update', 'destroy']);
+});
 
 require __DIR__.'/settings.php';
+
