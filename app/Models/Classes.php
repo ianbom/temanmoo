@@ -15,6 +15,7 @@ class Classes extends Model
 
     protected $fillable = [
         'name',
+        'slug',
         'color',
         'poster_image',
     ];

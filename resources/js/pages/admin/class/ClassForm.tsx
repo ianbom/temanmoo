@@ -3,11 +3,13 @@ import type { FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import ImageCropper from '@/components/ImageCropper';
 
 export type ClassItem = {
     id: number;
     name: string;
     color: string;
+    slug: string;
     poster_image: string | null;
     created_at: string;
     updated_at: string;
@@ -103,48 +105,18 @@ export default function ClassForm({ classItem = null, onSuccess }: ClassFormProp
                 )}
             </div>
 
-            {/* Poster Image */}
-            <div className="space-y-1.5">
-                <Label htmlFor="class-poster">Poster Image</Label>
-
-                {/* Preview existing image on edit */}
-                {isEdit && classItem?.poster_image && !data.poster_image && (
-                    <div className="mt-1 mb-2">
-                        <img
-                            src={classItem.poster_image}
-                            alt={classItem.name}
-                            className="h-24 w-auto rounded-lg border object-cover"
-                        />
-                        <p className="text-muted-foreground mt-1 text-xs">Gambar saat ini</p>
-                    </div>
-                )}
-
-                {/* Preview selected file */}
-                {data.poster_image && (
-                    <div className="mt-1 mb-2">
-                        <img
-                            src={URL.createObjectURL(data.poster_image)}
-                            alt="Preview"
-                            className="h-24 w-auto rounded-lg border object-cover"
-                        />
-                        <p className="text-muted-foreground mt-1 text-xs">Gambar baru</p>
-                    </div>
-                )}
-
-                <Input
-                    id="class-poster"
-                    type="file"
-                    accept="image/jpg,image/jpeg,image/png,image/webp"
-                    onChange={(e) => {
-                        const file = e.target.files?.[0] ?? null;
-                        setData('poster_image', file);
-                    }}
-                    disabled={processing}
-                />
-                {errors.poster_image && (
-                    <p className="text-destructive text-sm">{errors.poster_image}</p>
-                )}
-            </div>
+            {/* Poster Image dengan Crop 19:6 */}
+            <ImageCropper
+                label="Poster Image"
+                inputId="class-poster"
+                aspect={19 / 6}
+                aspectLabel="19:6"
+                existingImageUrl={isEdit ? (classItem?.poster_image ?? null) : null}
+                existingImageAlt={classItem?.name ?? 'Kelas'}
+                onCropComplete={(file) => setData('poster_image', file)}
+                error={errors.poster_image}
+                disabled={processing}
+            />
 
             <div className="flex justify-end gap-2 pt-2">
                 <Button type="submit" disabled={processing}>

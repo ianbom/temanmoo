@@ -10,6 +10,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import ImageCropper from '@/components/ImageCropper';
 
 export type PostItem = {
     id: number;
@@ -149,44 +150,18 @@ export default function PostForm({ classId, categories, post = null, onSuccess }
                 {errors.link && <p className="text-destructive text-sm">{errors.link}</p>}
             </div>
 
-            {/* Poster Image */}
-            <div className="space-y-1.5">
-                <Label htmlFor="post-poster">Poster Image</Label>
-
-                {isEdit && post?.poster_image && !data.poster_image && (
-                    <div className="mt-1 mb-2">
-                        <img
-                            src={post.poster_image}
-                            alt={post.title}
-                            className="h-24 w-auto rounded-lg border object-cover"
-                        />
-                        <p className="text-muted-foreground mt-1 text-xs">Gambar saat ini</p>
-                    </div>
-                )}
-
-                {data.poster_image && (
-                    <div className="mt-1 mb-2">
-                        <img
-                            src={URL.createObjectURL(data.poster_image)}
-                            alt="Preview"
-                            className="h-24 w-auto rounded-lg border object-cover"
-                        />
-                        <p className="text-muted-foreground mt-1 text-xs">Gambar baru</p>
-                    </div>
-                )}
-
-                <Input
-                    id="post-poster"
-                    type="file"
-                    accept="image/jpg,image/jpeg,image/png,image/webp"
-                    onChange={(e) => {
-                        const file = e.target.files?.[0] ?? null;
-                        setData('poster_image', file);
-                    }}
-                    disabled={processing}
-                />
-                {errors.poster_image && <p className="text-destructive text-sm">{errors.poster_image}</p>}
-            </div>
+            {/* Poster Image dengan Crop 1:1 */}
+            <ImageCropper
+                label="Poster Image"
+                inputId="post-poster"
+                aspect={1}
+                aspectLabel="1:1"
+                existingImageUrl={isEdit ? (post?.poster_image ?? null) : null}
+                existingImageAlt={post?.title ?? 'Post'}
+                onCropComplete={(file) => setData('poster_image', file)}
+                error={errors.poster_image}
+                disabled={processing}
+            />
 
             <div className="flex justify-end gap-2 pt-2">
                 <Button type="submit" disabled={processing}>

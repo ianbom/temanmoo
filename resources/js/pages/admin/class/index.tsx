@@ -1,5 +1,5 @@
 import { Head, router } from '@inertiajs/react';
-import { PlusIcon, PencilIcon, Trash2Icon, EyeIcon } from 'lucide-react';
+import { PlusIcon, PencilIcon, Trash2Icon, EyeIcon, Link } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -144,6 +144,13 @@ export default function ClassIndex({ classes }: Props) {
                                         </TableCell>
                                         <TableCell className="text-right">
                                             <div className="flex items-center justify-end gap-1.5">
+                                                <Button
+                                                    size="icon-sm"
+                                                    variant="outline"
+                                                    onClick={() => router.visit(`/kelas/${item.slug}`)}
+                                                >
+                                                    <Link />
+                                                </Button>
                                                 <Button
                                                     size="icon-sm"
                                                     variant="outline"

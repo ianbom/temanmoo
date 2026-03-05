@@ -85,4 +85,34 @@ class ClassController extends Controller
 
         return back()->with('success', 'Kelas berhasil dihapus.');
     }
+
+    /**
+     * Public-facing class detail page.
+     */
+    public function publicShow(Request $request, string $slug): Response
+    {
+        $class = Classes::where('slug', $slug)->firstOrFail();
+        $categoryId = $request->query('category_id') ? (int) $request->query('category_id') : null;
+        $search = $request->query('search');
+
+        $query = $class->posts()->with('category')->latest();
+
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        return Inertia::render('class', [
+            'classItem'  => new ClassResource($class),
+            'posts'      => PostResource::collection($query->paginate(8)->withQueryString()),
+            'categories' => Category::orderBy('name')->get(['id', 'name']),
+            'filters'    => [
+                'category_id' => $categoryId,
+                'search'      => $search,
+            ],
+        ]);
+    }
 }

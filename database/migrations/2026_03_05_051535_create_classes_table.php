@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('color');
             $table->string('poster_image');
             $table->timestamps();

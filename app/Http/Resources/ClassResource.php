@@ -18,6 +18,7 @@ class ClassResource extends JsonResource
         return [
             'id'           => $this->id,
             'name'         => $this->name,
+            'slug'         => $this->slug,
             'color'        => $this->color,
             'poster_image' => $this->poster_image ? Storage::url($this->poster_image) : null,
             'created_at'   => $this->created_at,

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Classes;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ClassService
 {
@@ -21,6 +22,7 @@ class ClassService
     public function create(array $data, $posterImage): Classes
     {
         $data['poster_image'] = $posterImage->store('classes', 'public');
+        $data['slug'] = $this->generateUniqueSlug($data['name']);
 
         return Classes::create($data);
     }
@@ -39,6 +41,11 @@ class ClassService
             $data['poster_image'] = $posterImage->store('classes', 'public');
         }
 
+        // Regenerate slug if name changed
+        if (isset($data['name']) && $data['name'] !== $class->name) {
+            $data['slug'] = $this->generateUniqueSlug($data['name'], $class->id);
+        }
+
         $class->update($data);
 
         return $class->fresh();
@@ -55,5 +62,26 @@ class ClassService
         }
 
         $class->delete();
+    }
+
+    /**
+     * Generate a unique slug from a given name.
+     * If slug already exists, append a numeric suffix (e.g. -1, -2, ...).
+     */
+    private function generateUniqueSlug(string $name, ?int $ignoreId = null): string
+    {
+        $slug = Str::slug($name);
+        $original = $slug;
+        $counter = 1;
+
+        while (
+            Classes::where('slug', $slug)
+                ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $slug = $original . '-' . $counter++;
+        }
+
+        return $slug;
     }
 }
