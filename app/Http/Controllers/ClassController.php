@@ -55,8 +55,9 @@ class ClassController extends Controller
     public function store(StoreClassRequest $request): RedirectResponse
     {
         $this->classService->create(
-            $request->only(['name', 'color']),
-            $request->file('poster_image')
+            $request->only(['name', 'color', 'footer_text', 'instagram_url']),
+            $request->file('poster_image'),
+            $request->file('logo_image')
         );
 
         return back()->with('success', 'Kelas berhasil ditambahkan.');
@@ -69,8 +70,9 @@ class ClassController extends Controller
     {
         $this->classService->update(
             $class,
-            $request->only(['name', 'color']),
-            $request->file('poster_image')
+            $request->only(['name', 'color', 'footer_text', 'instagram_url']),
+            $request->file('poster_image'),
+            $request->file('logo_image')
         );
 
         return back()->with('success', 'Kelas berhasil diperbarui.');
@@ -108,7 +110,9 @@ class ClassController extends Controller
         return Inertia::render('class', [
             'classItem'  => new ClassResource($class),
             'posts'      => PostResource::collection($query->paginate(8)->withQueryString()),
-            'categories' => Category::orderBy('name')->get(['id', 'name']),
+            'categories' => Category::whereIn('id', $class->posts()->distinct()->pluck('category_id'))
+                ->orderBy('name')
+                ->get(['id', 'name']),
             'filters'    => [
                 'category_id' => $categoryId,
                 'search'      => $search,

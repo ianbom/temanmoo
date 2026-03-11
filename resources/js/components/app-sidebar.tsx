@@ -24,12 +24,12 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Kategori',
-        href: 'categories',
+        href: '/categories',
         icon: Tag,
     },
     {
         title: 'Kelas',
-        href: 'classes',
+        href: '/classes',
         icon: BookOpen,
     },
 ];

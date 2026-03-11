@@ -16,13 +16,16 @@ class ClassResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'           => $this->id,
-            'name'         => $this->name,
-            'slug'         => $this->slug,
-            'color'        => $this->color,
-            'poster_image' => $this->poster_image ? Storage::url($this->poster_image) : null,
-            'created_at'   => $this->created_at,
-            'updated_at'   => $this->updated_at,
+            'id'            => $this->id,
+            'name'          => $this->name,
+            'slug'          => $this->slug,
+            'color'         => $this->color,
+            'poster_image'  => $this->poster_image ? Storage::url($this->poster_image) : null,
+            'logo_image'    => $this->logo_image ? Storage::url($this->logo_image) : null,
+            'footer_text'   => $this->footer_text,
+            'instagram_url' => $this->instagram_url,
+            'created_at'    => $this->created_at,
+            'updated_at'    => $this->updated_at,
         ];
     }
 }

@@ -19,10 +19,14 @@ class ClassService
     /**
      * Create a new class.
      */
-    public function create(array $data, $posterImage): Classes
+    public function create(array $data, $posterImage, $logoImage = null): Classes
     {
         $data['poster_image'] = $posterImage->store('classes', 'public');
         $data['slug'] = $this->generateUniqueSlug($data['name']);
+
+        if ($logoImage) {
+            $data['logo_image'] = $logoImage->store('classes/logos', 'public');
+        }
 
         return Classes::create($data);
     }
@@ -30,15 +34,20 @@ class ClassService
     /**
      * Update an existing class.
      */
-    public function update(Classes $class, array $data, $posterImage = null): Classes
+    public function update(Classes $class, array $data, $posterImage = null, $logoImage = null): Classes
     {
         if ($posterImage) {
-            // Delete old image
             if ($class->poster_image) {
                 Storage::disk('public')->delete($class->poster_image);
             }
-
             $data['poster_image'] = $posterImage->store('classes', 'public');
+        }
+
+        if ($logoImage) {
+            if ($class->logo_image) {
+                Storage::disk('public')->delete($class->logo_image);
+            }
+            $data['logo_image'] = $logoImage->store('classes/logos', 'public');
         }
 
         // Regenerate slug if name changed
@@ -56,9 +65,12 @@ class ClassService
      */
     public function delete(Classes $class): void
     {
-        // Delete image from storage
         if ($class->poster_image) {
             Storage::disk('public')->delete($class->poster_image);
+        }
+
+        if ($class->logo_image) {
+            Storage::disk('public')->delete($class->logo_image);
         }
 
         $class->delete();
@@ -66,7 +78,6 @@ class ClassService
 
     /**
      * Generate a unique slug from a given name.
-     * If slug already exists, append a numeric suffix (e.g. -1, -2, ...).
      */
     private function generateUniqueSlug(string $name, ?int $ignoreId = null): string
     {

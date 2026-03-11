@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "laravel-boost-temanmoo": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "cd /d E:\\laragon\\www\\temanmoo-belajar && php artisan boost:mcp"
+      ]
+    }
+  }
+}

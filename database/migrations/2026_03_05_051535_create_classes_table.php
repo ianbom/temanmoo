@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('logo_image')->nullable();
+            $table->string('footer_text')->nullable();
+            $table->string('instagram_url')->nullable();
             $table->string('slug')->unique();
             $table->string('color');
             $table->string('poster_image');

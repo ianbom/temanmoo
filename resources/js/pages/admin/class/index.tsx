@@ -68,7 +68,7 @@ export default function ClassIndex({ classes }: Props) {
                                 Tambah Kelas
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="sm:max-w-lg">
+                        <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
                             <DialogHeader>
                                 <DialogTitle>Tambah Kelas</DialogTitle>
                             </DialogHeader>
@@ -85,6 +85,7 @@ export default function ClassIndex({ classes }: Props) {
                         <TableHeader>
                             <TableRow className="bg-muted/50">
                                 <TableHead className="w-16">#</TableHead>
+                                <TableHead>Logo</TableHead>
                                 <TableHead>Poster</TableHead>
                                 <TableHead>Nama Kelas</TableHead>
                                 <TableHead>Warna</TableHead>
@@ -96,7 +97,7 @@ export default function ClassIndex({ classes }: Props) {
                             {items.length === 0 ? (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={6}
+                                        colSpan={7}
                                         className="text-muted-foreground py-12 text-center"
                                     >
                                         Belum ada kelas. Tambahkan kelas pertamamu!
@@ -107,6 +108,19 @@ export default function ClassIndex({ classes }: Props) {
                                     <TableRow key={item.id} className="transition-colors hover:bg-muted/30">
                                         <TableCell className="text-muted-foreground font-medium">
                                             {index + 1}
+                                        </TableCell>
+                                        <TableCell>
+                                            {item.logo_image ? (
+                                                <img
+                                                    src={item.logo_image}
+                                                    alt={`Logo ${item.name}`}
+                                                    className="h-10 w-10 rounded-full border object-cover"
+                                                />
+                                            ) : (
+                                                <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full border">
+                                                    <span className="text-muted-foreground text-[8px]">No Logo</span>
+                                                </div>
+                                            )}
                                         </TableCell>
                                         <TableCell>
                                             {item.poster_image ? (
@@ -174,7 +188,7 @@ export default function ClassIndex({ classes }: Props) {
                                                             <PencilIcon />
                                                         </Button>
                                                     </DialogTrigger>
-                                                    <DialogContent className="sm:max-w-lg">
+                                                    <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
                                                         <DialogHeader>
                                                             <DialogTitle>Edit Kelas</DialogTitle>
                                                         </DialogHeader>

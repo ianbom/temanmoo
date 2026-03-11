@@ -18,6 +18,9 @@ class Classes extends Model
         'slug',
         'color',
         'poster_image',
+        'logo_image',
+        'footer_text',
+        'instagram_url',
     ];
 
     /**
