@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePostRequest extends FormRequest
 {
@@ -18,7 +19,10 @@ class StorePostRequest extends FormRequest
     {
         return [
             'class_id'     => ['required', 'exists:classes,id'],
-            'category_id'  => ['required', 'exists:categories,id'],
+            'category_id'  => [
+                'required',
+                Rule::exists('categories', 'id')->where(fn ($query) => $query->where('class_id', $this->integer('class_id'))),
+            ],
             'title'        => ['required', 'string', 'max:255'],
             'price'        => ['required', 'numeric', 'min:0'],
             'link'         => ['required', 'url', 'max:2048'],
@@ -32,7 +36,7 @@ class StorePostRequest extends FormRequest
             'class_id.required'     => 'Kelas wajib dipilih.',
             'class_id.exists'       => 'Kelas tidak ditemukan.',
             'category_id.required'  => 'Kategori wajib dipilih.',
-            'category_id.exists'    => 'Kategori tidak ditemukan.',
+            'category_id.exists'    => 'Kategori tidak ditemukan untuk kelas yang dipilih.',
             'title.required'        => 'Judul wajib diisi.',
             'price.required'        => 'Harga wajib diisi.',
             'price.numeric'         => 'Harga harus berupa angka.',

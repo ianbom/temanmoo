@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
-import CategoryForm, { type Category } from './CategoryForm';
+import CategoryForm, { type Category, type ClassOption } from './CategoryForm';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -28,9 +28,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 type Props = {
     categories: Category[];
+    classes: ClassOption[];
 };
 
-export default function CategoryIndex({ categories }: Props) {
+export default function CategoryIndex({ categories, classes }: Props) {
     const [createOpen, setCreateOpen] = useState(false);
     const [editCategory, setEditCategory] = useState<Category | null>(null);
     const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -72,6 +73,7 @@ export default function CategoryIndex({ categories }: Props) {
                                 <DialogTitle>Tambah Kategori</DialogTitle>
                             </DialogHeader>
                             <CategoryForm
+                                classes={classes}
                                 onSuccess={() => setCreateOpen(false)}
                             />
                         </DialogContent>
@@ -84,6 +86,7 @@ export default function CategoryIndex({ categories }: Props) {
                         <TableHeader>
                             <TableRow className="bg-muted/50">
                                 <TableHead className="w-16">#</TableHead>
+                                <TableHead>Kelas</TableHead>
                                 <TableHead>Nama Kategori</TableHead>
                                 <TableHead>Dibuat Pada</TableHead>
                                 <TableHead className="text-right w-32">Aksi</TableHead>
@@ -93,7 +96,7 @@ export default function CategoryIndex({ categories }: Props) {
                             {categories.length === 0 ? (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={4}
+                                        colSpan={5}
                                         className="text-center text-muted-foreground py-12"
                                     >
                                         Belum ada kategori. Tambahkan kategori pertamamu!
@@ -104,6 +107,9 @@ export default function CategoryIndex({ categories }: Props) {
                                     <TableRow key={category.id} className="hover:bg-muted/30 transition-colors">
                                         <TableCell className="font-medium text-muted-foreground">
                                             {index + 1}
+                                        </TableCell>
+                                        <TableCell className="font-medium">
+                                            {category.class?.name ?? '-'}
                                         </TableCell>
                                         <TableCell className="font-medium">
                                             {category.name}
@@ -138,6 +144,7 @@ export default function CategoryIndex({ categories }: Props) {
                                                             <DialogTitle>Edit Kategori</DialogTitle>
                                                         </DialogHeader>
                                                         <CategoryForm
+                                                            classes={classes}
                                                             category={category}
                                                             onSuccess={() => setEditCategory(null)}
                                                         />

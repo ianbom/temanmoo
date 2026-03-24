@@ -161,7 +161,7 @@ export default function ClassIndex({ classes }: Props) {
                                                 <Button
                                                     size="icon-sm"
                                                     variant="outline"
-                                                    onClick={() => router.visit(`/kelas/${item.slug}`)}
+                                                    onClick={() => router.visit(`/${item.slug}`)}
                                                 >
                                                     <Link />
                                                 </Button>

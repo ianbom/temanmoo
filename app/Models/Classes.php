@@ -30,4 +30,12 @@ class Classes extends Model
     {
         return $this->hasMany(Post::class, 'class_id');
     }
+
+    /**
+     * Get all categories belonging to this class.
+     */
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class, 'class_id');
+    }
 }

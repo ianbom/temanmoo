@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Models\Category;
+use App\Models\Classes;
 use App\Services\CategoryService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -21,6 +22,7 @@ class CategoryController extends Controller
     {
         return Inertia::render('admin/category/index', [
             'categories' => $this->categoryService->getAll(),
+            'classes' => Classes::orderBy('name')->get(['id', 'name']),
         ]);
     }
 

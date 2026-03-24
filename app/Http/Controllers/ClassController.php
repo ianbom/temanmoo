@@ -42,7 +42,9 @@ class ClassController extends Controller
         return Inertia::render('admin/class/show', [
             'classItem'  => new ClassResource($class),
             'posts'      => PostResource::collection($this->postService->getByClass($class, $categoryId)),
-            'categories' => Category::orderBy('name')->get(['id', 'name']),
+            'categories' => Category::where('class_id', $class->id)
+                ->orderBy('name')
+                ->get(['id', 'name']),
             'filters'    => [
                 'category_id' => $categoryId,
             ],
