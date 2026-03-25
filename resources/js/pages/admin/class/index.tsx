@@ -279,7 +279,7 @@ export default function ClassIndex({ classes, filters }: Props) {
                                                 <Button
                                                     size="icon-sm"
                                                     variant="outline"
-                                                    onClick={() => router.visit(`/kelas/${item.slug}`)}
+                                                    onClick={() => router.visit(`/${item.slug}`)}
                                                     title="Lihat halaman publik"
                                                 >
                                                     <Link className="h-4 w-4" />
