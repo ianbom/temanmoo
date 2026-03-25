@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Models\Classes;
 use App\Services\CategoryService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -18,11 +20,14 @@ class CategoryController extends Controller
     /**
      * Display a listing of categories.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $filters = $request->only(['search', 'sort', 'direction', 'per_page', 'class_id']);
+
         return Inertia::render('admin/category/index', [
-            'categories' => $this->categoryService->getAll(),
+            'categories' => CategoryResource::collection($this->categoryService->getAdminList($filters)),
             'classes' => Classes::orderBy('name')->get(['id', 'name']),
+            'filters' => (object) $filters,
         ]);
     }
 

@@ -17,6 +17,32 @@ class ClassService
     }
 
     /**
+     * Get paginated admin list with filters.
+     */
+    public function getAdminList(array $filters = [])
+    {
+        $query = Classes::query();
+
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $sortField = $filters['sort'] ?? 'created_at';
+        $sortDirection = $filters['direction'] ?? 'desc';
+        
+        $allowedSortFields = ['name', 'created_at', 'id'];
+        if (in_array($sortField, $allowedSortFields)) {
+            $query->orderBy($sortField, $sortDirection === 'asc' ? 'asc' : 'desc');
+        } else {
+            $query->latest();
+        }
+
+        $perPage = $filters['per_page'] ?? 10;
+        return $query->paginate($perPage)->withQueryString();
+    }
+
+    /**
      * Create a new class.
      */
     public function create(array $data, $posterImage, $logoImage = null): Classes

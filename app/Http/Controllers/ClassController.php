@@ -25,10 +25,13 @@ class ClassController extends Controller
     /**
      * Display a listing of classes.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $filters = $request->only(['search', 'sort', 'direction', 'per_page']);
+
         return Inertia::render('admin/class/index', [
-            'classes' => ClassResource::collection($this->classService->getAll()),
+            'classes' => ClassResource::collection($this->classService->getAdminList($filters)),
+            'filters' => (object) $filters,
         ]);
     }
 
